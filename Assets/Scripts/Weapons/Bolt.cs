@@ -5,11 +5,16 @@ using UnityEngine;
 public class Bolt : MonoBehaviour
 {
     Rigidbody rigi;
+    GameObject cBow;
+    Vector3 locDirection;
 
     // Use this for initialization
     void Start()
     {
+        cBow = GameObject.Find("Crossbow");
         rigi = gameObject.GetComponent<Rigidbody>();
+        Crossbow cBowRef = cBow.GetComponent<Crossbow>();
+        locDirection = cBowRef.ProjectileOrigin.transform.InverseTransformDirection(Vector3.forward);
     }
 
     // Update is called once per frame
@@ -17,7 +22,7 @@ public class Bolt : MonoBehaviour
     {
         
 
-        rigi.AddRelativeForce(Camera.main.transform.localPosition * 20, ForceMode.Impulse);
+        rigi.AddForce(locDirection * 20, ForceMode.Impulse);
         Destroy(gameObject, 3f);
     }
 }

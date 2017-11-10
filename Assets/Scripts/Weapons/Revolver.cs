@@ -24,7 +24,7 @@ public class Revolver : Weapon
             attackable = 1 << LayerMask.NameToLayer("enemy"); // Set our layer to enemy if it does not by default.
     }
 
-    public override void Fire()
+    public override void Fire(float x)
     {
         RaycastHit hit;
 
@@ -53,7 +53,7 @@ public class Revolver : Weapon
 
     public override void Reload()
     {
-        if(Input.GetKeyDown(KeyCode.R) || ammo <= 0)
+        if (Input.GetKeyDown(KeyCode.R) || ammo < 0 || Input.GetButtonDown("gReload"))
         { // Manual reload, or when we are out of ammo
             StartCoroutine(RevolveReload());
             if (ammo == maxAmmo)
@@ -67,6 +67,13 @@ public class Revolver : Weapon
     // Update is called once per frame
     void Update()
     {
+        
+        if(ammo > maxAmmo)
+        {
+            StopAllCoroutines();
+            ammo = maxAmmo;
+        }
+
         if (blessedWeapon)
         {
             timer += Time.deltaTime;

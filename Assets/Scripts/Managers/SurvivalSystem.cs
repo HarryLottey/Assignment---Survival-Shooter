@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SurvivalSystem : MonoBehaviour
 {
@@ -20,7 +21,15 @@ public class SurvivalSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameOver == false)
+
+        Scene test = SceneManager.GetActiveScene(); // Store current scene
+        Scene test1 = SceneManager.GetSceneByName("Menu"); // store menu scene
+        if (test == test1) // If current scene is the menu
+        {
+            gameObject.SetActive(false); // Disable UI / conflicting statements
+        }
+
+        if (gameOver == false)
         scoreTimer += Time.deltaTime;
 
         if(blessed == false) // You do not have this powerup by default, you will lose time!
@@ -34,6 +43,7 @@ public class SurvivalSystem : MonoBehaviour
         {
             Time.timeScale = 0;
             gameOver = true;
+
         }
 
     }
@@ -46,7 +56,7 @@ public class SurvivalSystem : MonoBehaviour
         GUI.skin = skin1;
         if (gameOver == false)
         {
-            GUI.Label(new Rect(scrW * 7.5f, scrH * 6, scrW * 3, scrH * 2), "Time Until Corruption: " + lifeTimer.ToString("f0")); // Display timer with no decimal places
+            GUI.Label(new Rect(scrW * 7.5f, scrH * 6, scrW * 3, scrH * 2), "Time Until Corruption: \n (Lose Game) " + lifeTimer.ToString("f0")); // Display timer with no decimal places
         }
         else
         {

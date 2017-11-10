@@ -15,27 +15,28 @@ public class NetworkedWeaponSystem : NetworkBehaviour
     // Use this for initialization
     void Awake()
     {
-        equippedWeapons = GetComponentsInChildren<Weapon>();
+        equippedWeapons = GetComponentsInChildren<Weapon>(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer)
+            return;
 
 
-
-        // if (!isLocalPlayer)
-        //  {
-        // return;
-        // }
-
-        if (Input.GetButtonDown("Fire1"))
+        if (isLocalPlayer)
         {
-            Cmd_CheckFire();
+            WeaponSwitching();
+
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Cmd_CheckFire();
+                
+            }
         }
 
         
-        WeaponSwitching();
     }
 
     [Command] void Cmd_CheckFire()
@@ -49,7 +50,7 @@ public class NetworkedWeaponSystem : NetworkBehaviour
         // Set current weapon to the weapon that correlates with index number from heirarcy order
         Weapon currentWeapon = equippedWeapons[weaponIndex];
         
-        currentWeapon.Fire();
+        currentWeapon.Fire(currentWeapon.fireInterval);
     } 
     
 

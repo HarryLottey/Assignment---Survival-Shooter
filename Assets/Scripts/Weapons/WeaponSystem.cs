@@ -7,6 +7,8 @@ public class WeaponSystem : MonoBehaviour
 
     public int weaponIndex = 0;
     public Weapon[] equippedWeapons;
+    Weapon currentWeapon;
+    public int currentAmmo;
     
 
 
@@ -14,12 +16,13 @@ public class WeaponSystem : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        equippedWeapons = GetComponentsInChildren<Weapon>();
+        equippedWeapons = GetComponentsInChildren<Weapon>(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentAmmo = equippedWeapons[weaponIndex].ammo;
         WeaponSwitching();
         CheckFire();
     }
@@ -28,12 +31,13 @@ public class WeaponSystem : MonoBehaviour
     void CheckFire()
     {
         // Set current weapon to the weapon that correlates with index number from heirarcy order
-        Weapon currentWeapon = equippedWeapons[weaponIndex];
+        currentWeapon = equippedWeapons[weaponIndex];
         // IF user pressed down space
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") || Input.GetAxisRaw("cFire1") > 0)
         {
+            Debug.Log(Input.GetAxisRaw("cFire1").ToString());
             // Fire currentWeapon
-            currentWeapon.Fire();
+            currentWeapon.Fire(currentWeapon.fireInterval);
         }
     }
 
@@ -41,7 +45,7 @@ public class WeaponSystem : MonoBehaviour
     // Handles weapon switching
     void WeaponSwitching()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("gSwap"))
         {
             CycleWeapon(-1);
         }
@@ -100,7 +104,13 @@ public class WeaponSystem : MonoBehaviour
 
         #endregion
 
+
+
+
     }
+
+    
+
 }
 
 public abstract class Weapon : MonoBehaviour
@@ -115,7 +125,7 @@ public abstract class Weapon : MonoBehaviour
     
 
 
-    public abstract void Fire();
+    public abstract void Fire(float x);
     public virtual void Reload() // when reload is called, set current ammo to full clipsize
     {
         ammo = maxAmmo;

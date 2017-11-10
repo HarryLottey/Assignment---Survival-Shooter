@@ -22,7 +22,7 @@ public class InGamePauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("gPause"))
         {
             paused = !paused;
             
@@ -39,7 +39,7 @@ public class InGamePauseMenu : MonoBehaviour
             Cursor.visible = false;
         }
 
-        if (goMP)
+        if (goMP) // Unecessary
         {
             if (asyncLoad.isDone)
             {

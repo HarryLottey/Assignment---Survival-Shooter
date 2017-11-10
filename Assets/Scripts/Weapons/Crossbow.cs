@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Crossbow : Weapon
 {
-    [SerializeField]
-    Camera cam;
+
+
 
     public Transform ProjectileOrigin;
     public GameObject boltPrefab;
+    Light glow;
     public float fireDistance;
     public LayerMask attackable; // Weapon raycasts on this layer
 
@@ -17,19 +18,23 @@ public class Crossbow : Weapon
     // Use this for initialization
     void Awake()
     {
+        glow = gameObject.GetComponentInChildren<Light>();
 
-        boltPrefab = Resources.Load("ArrowTemp") as GameObject;
-
-        cam = Camera.main;
         if (attackable != 1 << LayerMask.NameToLayer("enemy")) // 1 << 8
             attackable = 1 << LayerMask.NameToLayer("enemy"); // Set our layer to enemy if it does not by default.
     }
 
-    public override void Fire()
+    private void Start()
+    {
+        boltPrefab = Resources.Load("ArrowTemp") as GameObject;
+    }
+
+    public override void Fire(float x)
     {
        
         if (ammo > 0)
         {
+            ammo--;
             Instantiate(boltPrefab, ProjectileOrigin.transform.position, transform.localRotation);                           
         }
 
@@ -42,10 +47,10 @@ public class Crossbow : Weapon
 
     public override void Reload()
     {
-        if (Input.GetKeyDown(KeyCode.R) || ammo <= 0)
+        if (Input.GetKeyDown(KeyCode.R) || ammo <= 0 || Input.GetButtonDown("gReload"))
         { // Manual reload, or when we are out of ammo
             StartCoroutine(CrossbowReload());
-            if (ammo == maxAmmo)
+            if (ammo >= maxAmmo)
                 StopCoroutine(CrossbowReload());
         }
 
@@ -58,12 +63,14 @@ public class Crossbow : Weapon
     {
         if (blessedWeapon)
         {
+            glow.intensity = 2.16f;
             damage = 115;
             fireInterval = 0.6f;
             reloadSpeed = 1.5f;
         }
         else
         {
+            glow.intensity = 0;
             reloadSpeed = 4f;
             damage = 45;
             fireInterval = 0.3f;
@@ -72,6 +79,12 @@ public class Crossbow : Weapon
 
         if (ammo < maxAmmo)
             Reload();
+
+        if (ammo > maxAmmo)
+        {
+            StopAllCoroutines();
+            ammo = maxAmmo;
+        }
     }
 
     IEnumerator CrossbowReload()

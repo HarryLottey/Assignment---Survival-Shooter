@@ -60,8 +60,6 @@ public class PlayerController : MonoBehaviour
     {
         
 
-        
-
       // transform.localEulerAngles = new Vector3(mY = Mathf.Clamp(-mY, -52f, 52f), mX, transform.localEulerAngles.z);
 
         transform.Rotate(0, mX, 0); // Mouse X rotation: rotates camera left and right.
@@ -73,6 +71,13 @@ public class PlayerController : MonoBehaviour
     // Player movement using the settings for Gamepad
      public void GamepadMove(float h, float v)
     {
+        moveDirection = new Vector3(h, 0, v); // X = left and right | Z = front and back
 
+        // Apply movement
+        moveDirection = transform.rotation * moveDirection; // Rotate locally
+        moveDirection *= movementSpeed;
+        moveDirection.y -= gravity * Time.deltaTime;
+
+        charMovement.Move(moveDirection * Time.deltaTime);
     }
 }

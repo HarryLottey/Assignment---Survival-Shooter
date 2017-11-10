@@ -15,8 +15,8 @@ public class UseAction : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
-        equippedWeapons = GetComponentsInChildren<Weapon>();
+
+        equippedWeapons = GetComponentsInChildren<Weapon>(true);
 
     }
 
@@ -29,7 +29,7 @@ public class UseAction : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out interaction, interactionDistance))
         {
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("gUse"))
             {
                 // IF we hit an object that is interactable
                 if (interaction.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
@@ -38,16 +38,20 @@ public class UseAction : MonoBehaviour
 
                     if (objName == "Altar")
                     {
-                       
+
                         Altar altrRef = interaction.collider.gameObject.GetComponent<Altar>();
                         Debug.Log(interaction.transform.name);
                         if (currentWeapon.blessedWeapon == false)
-                        altrRef.BlessWeapon(currentWeapon);
+                            altrRef.BlessWeapon(currentWeapon);
                     }
                 }
-           
-
             }
         }
+
+
+
     }
+
+
+ 
 }
