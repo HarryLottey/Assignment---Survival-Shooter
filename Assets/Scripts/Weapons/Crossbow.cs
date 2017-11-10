@@ -8,7 +8,7 @@ public class Crossbow : Weapon
 
 
 
-    public Transform ProjectileOrigin;
+    public Transform projectileOrigin;
     public GameObject boltPrefab;
     Light glow;
     public float fireDistance;
@@ -35,7 +35,7 @@ public class Crossbow : Weapon
         if (ammo > 0)
         {
             ammo--;
-            Instantiate(boltPrefab, ProjectileOrigin.transform.position, transform.localRotation);                           
+            Instantiate(boltPrefab, projectileOrigin.transform.position, transform.localRotation);                           
         }
 
     }

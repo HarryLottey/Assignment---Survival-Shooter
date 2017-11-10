@@ -14,7 +14,7 @@ public class Bolt : MonoBehaviour
         cBow = GameObject.Find("Crossbow");
         rigi = gameObject.GetComponent<Rigidbody>();
         Crossbow cBowRef = cBow.GetComponent<Crossbow>();
-        locDirection = cBowRef.ProjectileOrigin.transform.InverseTransformDirection(Vector3.forward);
+        locDirection = cBowRef.projectileOrigin.transform.InverseTransformDirection(Vector3.forward);
     }
 
     // Update is called once per frame

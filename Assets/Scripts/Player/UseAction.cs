@@ -10,7 +10,6 @@ public class UseAction : MonoBehaviour
     int wepIndex;
     RaycastHit interaction;
     float interactionDistance = 5f;
-    Altar AltarRef;
 
     // Use this for initialization
     void Start()
