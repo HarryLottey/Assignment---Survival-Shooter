@@ -8,7 +8,9 @@ public class Revolver : Weapon
     [SerializeField]
     Camera cam;
 
-    
+    public float blessDuration = 30f;
+    public float timer;
+    Light glow;
     public float fireDistance;
     public LayerMask attackable; // Weapon raycasts on this layer
 
@@ -16,6 +18,7 @@ public class Revolver : Weapon
     // Use this for initialization
     void Awake()
     {
+        glow = gameObject.GetComponentInChildren<Light>();
         cam = Camera.main;
         if(attackable != 1 << LayerMask.NameToLayer("enemy")) // 1 << 8
             attackable = 1 << LayerMask.NameToLayer("enemy"); // Set our layer to enemy if it does not by default.
@@ -25,12 +28,22 @@ public class Revolver : Weapon
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, fireDistance,attackable))
+        if(ammo > 0)
         {
-            
-            Enemy kill = hit.transform.GetComponent<Enemy>();
-            kill.health -= damage;
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, fireDistance))
+            {
+                ammo--; // Reduce our ammo once the ray has been fired
+
+                if(hit.transform.gameObject.layer == LayerMask.NameToLayer("enemy")) // If we hit and enemy layer, do stuff
+                {
+                    Enemy kill = hit.transform.GetComponent<Enemy>();
+                    kill.health -= damage;
+                    
+                }
+                
+            }
         }
+       
     }
 
     private void OnDrawGizmos()
@@ -56,19 +69,26 @@ public class Revolver : Weapon
     {
         if (blessedWeapon)
         {
+            timer += Time.deltaTime;
+            glow.intensity = 2.16f;
             damage = 115;
             fireInterval = 0.6f;
             reloadSpeed = 1.5f;
+
+            if (timer >= blessDuration)
+                blessedWeapon = false;
+
         }
         else
         {
+            glow.intensity = 0;
             reloadSpeed = 4f;
             damage = 45;
             fireInterval = 0.3f;
         }
 
         
-
+        if(ammo < maxAmmo)
         Reload();
     }
 

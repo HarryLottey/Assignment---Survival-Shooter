@@ -8,6 +8,8 @@ public class UserController : MonoBehaviour
     
     
     public PlayerController playerInput;
+    public GameObject gameMasterReference;
+    InGamePauseMenu pauseboi;
 
     // Keyboard
     float kH; 
@@ -19,8 +21,10 @@ public class UserController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        playerInput = GetComponentInChildren<PlayerController>();
 
+        gameMasterReference = GameObject.FindGameObjectWithTag("GM");
+        playerInput = GetComponentInChildren<PlayerController>();
+        pauseboi = gameMasterReference.GetComponentInChildren<InGamePauseMenu>();
         Cursor.visible = false;
 
         
@@ -40,18 +44,21 @@ public class UserController : MonoBehaviour
 
 
 
+        if(pauseboi.paused == false) // If the game isnt paused, allow input
+        {
+            // Gamepad
 
-        // Gamepad
+            /// float gH = Input.GetAxis("");
+            /// float gV = Input.GetAxis("");
 
-        /// float gH = Input.GetAxis("");
-        /// float gV = Input.GetAxis("");
+            // Apply Keyboard movement
+            playerInput.KeyboardMove(kH, kV);
+            playerInput.Jump(j);
 
-        // Apply Keyboard movement
-        playerInput.KeyboardMove(kH, kV);
-        playerInput.Jump(j);
-
-        // Apply MouseLook
-        playerInput.CameraLook(mouseX, mouseY);
+            // Apply MouseLook
+            playerInput.CameraLook(mouseX, mouseY);
+        }
+        
 
     }
 }

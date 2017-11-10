@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SurvivalSystem : MonoBehaviour
 {
+    public float scoreTimer; // This value reads how long in seconds you lasted during the game.
     public float lifeTimer = 120f; // If this timer hits zero game over (lore reasons i dunno)
     public string lifeTimerVisual; // GUI Representation;
     public bool blessed;
@@ -19,6 +20,9 @@ public class SurvivalSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gameOver == false)
+        scoreTimer += Time.deltaTime;
+
         if(blessed == false) // You do not have this powerup by default, you will lose time!
         lifeTimer -= Time.deltaTime;
 
@@ -43,12 +47,6 @@ public class SurvivalSystem : MonoBehaviour
         if (gameOver == false)
         {
             GUI.Label(new Rect(scrW * 7.5f, scrH * 6, scrW * 3, scrH * 2), "Time Until Corruption: " + lifeTimer.ToString("f0")); // Display timer with no decimal places
-
-            // Testing adding time // Successs
-            if (GUI.Button(new Rect(scrW * 6, scrH * 4, scrW * 1, scrH * 1), "gg"))
-            {
-                lifeTimer += 5f;
-            }
         }
         else
         {

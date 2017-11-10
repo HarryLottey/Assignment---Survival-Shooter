@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour
         // IF distance is too far from the player, disable mesh renderer
         /// Fog will be present, this is an attempt to optimise ((might be impactful if proper models were used)), hide unseen enemies.
         /// 
-        if(Vector3.Distance(gameObject.transform.position,target1.transform.position) > renderDistance)
+        if(Vector3.Distance(gameObject.transform.position,target1.transform.position) > renderDistance && health > 0)
         {
             rend.enabled = false;
         }
@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour
         }
 
         
-        if(target1Spotted == true)
+        if(target1Spotted == true && health > 0) // Only run If alive
         {
             Ai.SetDestination(target1.transform.position); // Within update, it will update with the player movements to follow them.
         }
@@ -76,6 +76,16 @@ public class Enemy : MonoBehaviour
 
         }
     }
+
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("massive damage");
+        }
+    }
+
 
 
     public virtual void OnDrawGizmos()

@@ -10,11 +10,12 @@ public class UseAction : MonoBehaviour
     int wepIndex;
     RaycastHit interaction;
     float interactionDistance = 5f;
+    Altar AltarRef;
 
     // Use this for initialization
     void Start()
     {
-       
+        
         equippedWeapons = GetComponentsInChildren<Weapon>();
 
     }
@@ -37,8 +38,10 @@ public class UseAction : MonoBehaviour
 
                     if (objName == "Altar")
                     {
-                        Altar altrRef = interaction.transform.gameObject.GetComponent<Altar>();
-                        if(currentWeapon.blessedWeapon == false)
+                       
+                        Altar altrRef = interaction.collider.gameObject.GetComponent<Altar>();
+                        Debug.Log(interaction.transform.name);
+                        if (currentWeapon.blessedWeapon == false)
                         altrRef.BlessWeapon(currentWeapon);
                     }
                 }
